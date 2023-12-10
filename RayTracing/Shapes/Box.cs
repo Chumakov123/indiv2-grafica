@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
 using System.Text;
@@ -35,22 +36,40 @@ namespace RayTracing.Shapes
                 if (invDirection < 0.0)
                     (t1, t2) = (t2, t1);
 
-                tmin = t1 > tmin ? t1 : tmin;
-                tmax = t2 < tmax ? t2 : tmax;
+                tmin = Math.Max(t1, tmin);
+                tmax = Math.Min(t2, tmax);
 
                 if (tmin > tmax)
                     return (double.PositiveInfinity, double.PositiveInfinity);
             }
 
-            return (tmin, tmax);
+            if (tmin > 0.0 && tmax > 0.0)
+                return (tmin, tmax);
+
+            return (double.PositiveInfinity, double.PositiveInfinity);
         }
         public override Vector3 GetNormal(Vector3 point)
         {
-            double bias = 1.000001;
             Vector3 center = (bounds[0] + bounds[1]) / 2;
-            Vector3 p = -(point - center) / ((bounds[0] - bounds[1]) / 2) * bias;
+            Vector3 halfExtents = (bounds[1] - bounds[0]) / 2;
 
-            return new Vector3((int)p.x, (int)p.y, (int)p.z).Normalize();
+            Vector3 localPoint = (point - center) / halfExtents;
+
+            double maxComponent = Math.Max(Math.Max(Math.Abs(localPoint.x), Math.Abs(localPoint.y)), Math.Abs(localPoint.z));
+
+            if (Math.Abs(localPoint.x) == maxComponent)
+            {
+                return new Vector3(Math.Sign(localPoint.x), 0, 0);
+            }
+            else if (Math.Abs(localPoint.y) == maxComponent)
+            {
+                return new Vector3(0, Math.Sign(localPoint.y), 0);
+            }
+            else
+            {
+                return new Vector3(0, 0, Math.Sign(localPoint.z));
+            }
         }
+       
     }
 }

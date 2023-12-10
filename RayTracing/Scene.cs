@@ -15,8 +15,8 @@ namespace RayTracing
         public Dictionary<string, Material> materials = new Dictionary<string, Material>
         {
             { "default", new Material(0,0,0)},
-            { "transparent", new Material(0.3,0,0.5)},
-            { "mirror", new Material(0.5,0.9,0)},
+            { "transparent", new Material(0,0,0.8)},
+            { "mirror", new Material(0,0.8,0)},
         };
         public Scene()
         {
@@ -40,9 +40,9 @@ namespace RayTracing
 
             lights = new Dictionary<string, LightSource>();
 
-            lights.Add("ambient", new LightSource(LightSource.Type.AMBIENT, 0.175));
-            lights.Add("point1", new LightSource(LightSource.Type.POINT, new Vector3(0, 0, -1), 0.5));
-            lights.Add("point2", new LightSource(LightSource.Type.POINT, new Vector3(0, 2, 2), 0.6, false));
+            lights.Add("ambient", new LightSource(LightSource.Type.AMBIENT, 0.125));
+            lights.Add("point1", new LightSource(LightSource.Type.POINT, new Vector3(0, 0, -1), 0.8));
+            lights.Add("point2", new LightSource(LightSource.Type.POINT, new Vector3(0, 0, 0), 0.8, false));
         }
     }
 }

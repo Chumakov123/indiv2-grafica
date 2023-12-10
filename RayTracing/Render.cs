@@ -13,18 +13,6 @@ namespace RayTracing
 {
     public partial class Render : Form
     {
-        private bool sphere_mirror = false;
-        private bool sphere_transparent = false;
-        private bool box_mirror = false;
-        private bool box_transparent = false;
-        private bool forward_wall_mirror = false;
-        private bool backward_wall_mirror = false;
-        private bool left_wall_mirror = false;
-        private bool right_wall_mirror = false;
-        private bool top_wall_mirror = false;
-        private bool bottom_wall_mirror = false;
-        private bool second_light = false;
-
         private Scene scene;
         private Bitmap bitmap;
         private Graphics graphics;
@@ -54,7 +42,7 @@ namespace RayTracing
                         Vector3 rayDirection = CalculateRayDirection(x, y);
                         Ray ray = new Ray(camera_pos, rayDirection.Normalize());
 
-                        Color pixelColor = TraceRay(ray, 5); // 5 - максимальная глубина трассировки
+                        Color pixelColor = TraceRay(ray, 5);
                         fastBitmap[x + canvas.Width / 2, canvas.Height / 2 - y - 1] = pixelColor;
                     }
             }
@@ -70,7 +58,7 @@ namespace RayTracing
         {
             if (depth <= 0)
             {
-                return Color.Black; // Stop recursion if depth is zero
+                return Color.Black;
             }
 
             Shape closestShape = null;
@@ -99,7 +87,7 @@ namespace RayTracing
 
                 Color color = CalculateShading(intersectionPoint, normal, closestShape);
 
-                // Reflection
+                // Отражение
                 if (material.reflection > 0)
                 {
                     Ray reflectedRay = CalculateReflectedRay(ray, intersectionPoint, normal);
@@ -107,18 +95,18 @@ namespace RayTracing
                     color = CombineColors(color, reflectionColor, material.reflection);
                 }
 
-                // Refraction
-                if (material.transparent > 0)
-                {
-                    Ray refractedRay = CalculateRefractedRay(ray, intersectionPoint, normal, material.transparent);
-                    Color refractionColor = TraceRay(refractedRay, depth - 1);
-                    color = CombineColors(color, refractionColor, material.transparent);
-                }
+                //// Прозрачность
+                //if (material.transparent > 0)
+                //{
+                //    Ray refractedRay = CalculateRefractedRay(ray, intersectionPoint, normal, material.transparent);
+                //    Color refractionColor = TraceRay(refractedRay, depth - 1);
+                //    color = CombineColors(color, refractionColor, material.transparent);
+                //}
 
                 return color;
             }
 
-            return Color.Black; // No intersection
+            return Color.Black;
         }
         private Color CalculateShading(Vector3 point, Vector3 normal, Shape shape)
         {
@@ -130,7 +118,6 @@ namespace RayTracing
                     continue;
                 if (light.type == LightSource.Type.AMBIENT)
                 {
-                    // Для окружающего света не рассчитываем тени
                     color = CombineColors(color, shape.color, light.intensity);
                 }
                 else
@@ -165,20 +152,20 @@ namespace RayTracing
                 var cur_t = shape.Intersect(shadowRay);
                 if (cur_t.Item1 > 0 && cur_t.Item1 < maxDistance)
                 {
-                    return true; // The point is in shadow
+                    return true;
                 }
                 if (cur_t.Item2 > 0 && cur_t.Item2 < maxDistance)
                 {
-                    return true; // The point is in shadow
+                    return true;
                 }
             }
 
-            return false; // The point is not in shadow
+            return false;
         }
         private Ray CalculateReflectedRay(Ray incidentRay, Vector3 point, Vector3 normal)
         {
             Vector3 reflectionDirection = incidentRay.direction - 2 * Vector3.Dot(normal, incidentRay.direction) * normal;
-            Vector3 reflectionOrigin = point + 0.001 * reflectionDirection; // Avoid self-intersection
+            Vector3 reflectionOrigin = point + 0.001 * reflectionDirection;
             return new Ray(reflectionOrigin, reflectionDirection);
         }
         private Ray CalculateRefractedRay(Ray incidentRay, Vector3 point, Vector3 normal, double transparency)
@@ -213,17 +200,13 @@ namespace RayTracing
 
         public void UpdateUI()
         {
-            cb_sphere_mirror.Checked = sphere_mirror;
-            cb_sphere_transparent.Checked = sphere_transparent;
-            cb_box_mirror.Checked = box_mirror;
-            cb_box_transparent.Checked = box_transparent;
-            cb_forward_mirror.Checked = forward_wall_mirror;
-            cb_backward_mirror.Checked = backward_wall_mirror;
-            cb_left_mirror.Checked = left_wall_mirror;
-            cb_right_mirror.Checked = right_wall_mirror;
-            cb_top_mirror.Checked = top_wall_mirror;
-            cb_bottom_mirror.Checked = bottom_wall_mirror;
-            cb_second_light.Checked = second_light;
+            cam_x.Value = (Decimal)camera_pos.x;
+            cam_y.Value = (Decimal)camera_pos.y;
+            cam_z.Value = (Decimal)camera_pos.z;
+
+            light_x.Value = (Decimal)scene.lights["point2"].origin.x;
+            light_y.Value = (Decimal)scene.lights["point2"].origin.y;
+            light_z.Value = (Decimal)scene.lights["point2"].origin.z;
         }
 
         private void bt_run_Click(object sender, EventArgs e)
@@ -232,106 +215,101 @@ namespace RayTracing
         }
         private void cb_sphere_transparent_CheckedChanged(object sender, EventArgs e)
         {
-            sphere_transparent = cb_sphere_transparent.Checked;
-            if (sphere_transparent)
+            if (cb_sphere_transparent.Checked)
                 scene.objects["sphere_transparent"].material = scene.materials["transparent"];
             else
                 scene.objects["sphere_transparent"].material = scene.materials["default"];
         }
         private void cb_sphere_mirror_CheckedChanged(object sender, EventArgs e)
         {
-            sphere_mirror = cb_sphere_mirror.Checked;
-            if (sphere_mirror)
+            if (cb_sphere_mirror.Checked)
                 scene.objects["sphere_mirror"].material = scene.materials["mirror"];
             else
                 scene.objects["sphere_mirror"].material = scene.materials["default"];
         }
         private void cb_box_transparent_CheckedChanged(object sender, EventArgs e)
         {
-            box_transparent = cb_box_transparent.Checked;
-            if (box_transparent)
+            if (cb_box_transparent.Checked)
                 scene.objects["box_transparent"].material = scene.materials["transparent"];
             else
                 scene.objects["box_transparent"].material = scene.materials["default"];
         }
         private void cb_box_mirror_CheckedChanged(object sender, EventArgs e)
         {
-            box_mirror = cb_box_mirror.Checked;
-            if (box_mirror)
+            if (cb_box_mirror.Checked)
                 scene.objects["box_mirror"].material = scene.materials["mirror"];
             else
                 scene.objects["box_mirror"].material = scene.materials["default"];
         }
         private void cb_forward_mirror_CheckedChanged(object sender, EventArgs e)
         {
-            forward_wall_mirror = cb_forward_mirror.Checked;
-            if (forward_wall_mirror)
+            if (cb_forward_mirror.Checked)
                 scene.objects["forward"].material = scene.materials["mirror"];
             else
                 scene.objects["forward"].material = scene.materials["default"];
         }
         private void cb_backward_mirror_CheckedChanged(object sender, EventArgs e)
         {
-            backward_wall_mirror = cb_backward_mirror.Checked;
-            if (backward_wall_mirror)
+            if (cb_backward_mirror.Checked)
                 scene.objects["backward"].material = scene.materials["mirror"];
             else
                 scene.objects["backward"].material = scene.materials["default"];
         }
         private void cb_left_mirror_CheckedChanged(object sender, EventArgs e)
         {
-            left_wall_mirror = cb_left_mirror.Checked;
-            if (left_wall_mirror)
+            if (cb_left_mirror.Checked)
                 scene.objects["left"].material = scene.materials["mirror"];
             else
                 scene.objects["left"].material = scene.materials["default"];
         }
         private void cb_right_mirror_CheckedChanged(object sender, EventArgs e)
         {
-            right_wall_mirror = cb_right_mirror.Checked;
-            if (right_wall_mirror)
+            if (cb_right_mirror.Checked)
                 scene.objects["right"].material = scene.materials["mirror"];
             else
                 scene.objects["right"].material = scene.materials["default"];
         }
         private void cb_top_mirror_CheckedChanged(object sender, EventArgs e)
         {
-            top_wall_mirror = cb_top_mirror.Checked;
-            if (top_wall_mirror)
+            if (cb_top_mirror.Checked)
                 scene.objects["top"].material = scene.materials["mirror"];
             else
                 scene.objects["top"].material = scene.materials["default"];
         }
         private void cb_bottom_mirror_CheckedChanged(object sender, EventArgs e)
         {
-            bottom_wall_mirror = cb_bottom_mirror.Checked;
-            if (top_wall_mirror)
+            if (cb_bottom_mirror.Checked)
                 scene.objects["bottom"].material = scene.materials["mirror"];
             else
                 scene.objects["bottom"].material = scene.materials["default"];
         }
         private void cb_second_light_CheckedChanged(object sender, EventArgs e)
         {
-            second_light = cb_second_light.Checked;
-            scene.lights["point2"].isEnabled = second_light;
+            scene.lights["point2"].isEnabled = cb_second_light.Checked;
         }
-
         private void cam_x_ValueChanged(object sender, EventArgs e)
         {
             camera_pos.x = (int)cam_x.Value;
-            RenderScene();
         }
-
         private void cam_y_ValueChanged(object sender, EventArgs e)
         {
             camera_pos.y = (int)cam_y.Value;
-            RenderScene();
         }
-
         private void cam_z_ValueChanged(object sender, EventArgs e)
         {
-            camera_pos.z = (double)cam_z.Value/10;
-            RenderScene();
+            camera_pos.z = (double)cam_z.Value;
+        }
+        private void light_x_ValueChanged(object sender, EventArgs e)
+        {
+            scene.lights["point2"].origin.x = (int)light_x.Value;
+        }
+        private void light_y_ValueChanged(object sender, EventArgs e)
+        {
+            scene.lights["point2"].origin.y = (int)light_y.Value;
+        }
+        private void light_z_ValueChanged(object sender, EventArgs e)
+        {
+            scene.lights["point2"].origin.z = (int)light_z.Value;
         }
     }
 }

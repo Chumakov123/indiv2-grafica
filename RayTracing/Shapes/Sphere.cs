@@ -32,7 +32,22 @@ namespace RayTracing.Shapes
             double sqrtDisc = Math.Sqrt(disc);
             double denom = 1 / (2 * a);
 
-            return ((-b + sqrtDisc) * denom, (-b - sqrtDisc) * denom);
+            double t1 = (-b + sqrtDisc) * denom;
+            double t2 = (-b - sqrtDisc) * denom;
+
+            bool insideSphere = false;
+
+            if (t1 < 0 && t2 < 0)
+            {
+                insideSphere = true;
+            }
+
+            if (insideSphere)
+            {
+                return (infinity, infinity);
+            }
+
+            return (t1, t2);
         }
         public override Vector3 GetNormal(Vector3 p)
         {

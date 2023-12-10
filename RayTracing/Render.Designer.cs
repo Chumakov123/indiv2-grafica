@@ -44,7 +44,13 @@
             this.cb_backward_mirror = new System.Windows.Forms.CheckBox();
             this.cb_forward_mirror = new System.Windows.Forms.CheckBox();
             this.gb_lighting = new System.Windows.Forms.GroupBox();
+            this.label4 = new System.Windows.Forms.Label();
             this.cb_second_light = new System.Windows.Forms.CheckBox();
+            this.label5 = new System.Windows.Forms.Label();
+            this.label6 = new System.Windows.Forms.Label();
+            this.light_y = new System.Windows.Forms.NumericUpDown();
+            this.light_x = new System.Windows.Forms.NumericUpDown();
+            this.light_z = new System.Windows.Forms.NumericUpDown();
             this.cam_x = new System.Windows.Forms.NumericUpDown();
             this.cam_y = new System.Windows.Forms.NumericUpDown();
             this.cam_z = new System.Windows.Forms.NumericUpDown();
@@ -57,6 +63,9 @@
             this.gb_boxes.SuspendLayout();
             this.gb_walls.SuspendLayout();
             this.gb_lighting.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.light_y)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.light_x)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.light_z)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.cam_x)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.cam_y)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.cam_z)).BeginInit();
@@ -77,7 +86,7 @@
             // 
             this.canvas.Location = new System.Drawing.Point(148, 12);
             this.canvas.Name = "canvas";
-            this.canvas.Size = new System.Drawing.Size(640, 480);
+            this.canvas.Size = new System.Drawing.Size(700, 530);
             this.canvas.TabIndex = 1;
             this.canvas.TabStop = false;
             // 
@@ -106,6 +115,7 @@
             // cb_sphere_transparent
             // 
             this.cb_sphere_transparent.AutoSize = true;
+            this.cb_sphere_transparent.Enabled = false;
             this.cb_sphere_transparent.Location = new System.Drawing.Point(6, 19);
             this.cb_sphere_transparent.Name = "cb_sphere_transparent";
             this.cb_sphere_transparent.Size = new System.Drawing.Size(98, 17);
@@ -139,6 +149,7 @@
             // cb_box_transparent
             // 
             this.cb_box_transparent.AutoSize = true;
+            this.cb_box_transparent.Enabled = false;
             this.cb_box_transparent.Location = new System.Drawing.Point(6, 19);
             this.cb_box_transparent.Name = "cb_box_transparent";
             this.cb_box_transparent.Size = new System.Drawing.Size(98, 17);
@@ -230,13 +241,28 @@
             // 
             // gb_lighting
             // 
+            this.gb_lighting.Controls.Add(this.label4);
             this.gb_lighting.Controls.Add(this.cb_second_light);
+            this.gb_lighting.Controls.Add(this.label5);
+            this.gb_lighting.Controls.Add(this.label6);
+            this.gb_lighting.Controls.Add(this.light_y);
+            this.gb_lighting.Controls.Add(this.light_x);
+            this.gb_lighting.Controls.Add(this.light_z);
             this.gb_lighting.Location = new System.Drawing.Point(12, 355);
             this.gb_lighting.Name = "gb_lighting";
-            this.gb_lighting.Size = new System.Drawing.Size(130, 47);
+            this.gb_lighting.Size = new System.Drawing.Size(130, 87);
             this.gb_lighting.TabIndex = 3;
             this.gb_lighting.TabStop = false;
             this.gb_lighting.Text = "Освещение";
+            // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.Location = new System.Drawing.Point(103, 39);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(14, 13);
+            this.label4.TabIndex = 16;
+            this.label4.Text = "Z";
             // 
             // cb_second_light
             // 
@@ -248,6 +274,63 @@
             this.cb_second_light.Text = "Второй источник";
             this.cb_second_light.UseVisualStyleBackColor = true;
             this.cb_second_light.CheckedChanged += new System.EventHandler(this.cb_second_light_CheckedChanged);
+            // 
+            // label5
+            // 
+            this.label5.AutoSize = true;
+            this.label5.Location = new System.Drawing.Point(57, 39);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(14, 13);
+            this.label5.TabIndex = 15;
+            this.label5.Text = "Y";
+            // 
+            // label6
+            // 
+            this.label6.AutoSize = true;
+            this.label6.Location = new System.Drawing.Point(17, 39);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(14, 13);
+            this.label6.TabIndex = 14;
+            this.label6.Text = "X";
+            // 
+            // light_y
+            // 
+            this.light_y.Location = new System.Drawing.Point(49, 55);
+            this.light_y.Minimum = new decimal(new int[] {
+            100,
+            0,
+            0,
+            -2147483648});
+            this.light_y.Name = "light_y";
+            this.light_y.Size = new System.Drawing.Size(37, 20);
+            this.light_y.TabIndex = 12;
+            this.light_y.ValueChanged += new System.EventHandler(this.light_y_ValueChanged);
+            // 
+            // light_x
+            // 
+            this.light_x.Location = new System.Drawing.Point(6, 55);
+            this.light_x.Minimum = new decimal(new int[] {
+            100,
+            0,
+            0,
+            -2147483648});
+            this.light_x.Name = "light_x";
+            this.light_x.Size = new System.Drawing.Size(37, 20);
+            this.light_x.TabIndex = 11;
+            this.light_x.ValueChanged += new System.EventHandler(this.light_x_ValueChanged);
+            // 
+            // light_z
+            // 
+            this.light_z.Location = new System.Drawing.Point(92, 55);
+            this.light_z.Minimum = new decimal(new int[] {
+            100,
+            0,
+            0,
+            -2147483648});
+            this.light_z.Name = "light_z";
+            this.light_z.Size = new System.Drawing.Size(37, 20);
+            this.light_z.TabIndex = 13;
+            this.light_z.ValueChanged += new System.EventHandler(this.light_z_ValueChanged);
             // 
             // cam_x
             // 
@@ -296,12 +379,12 @@
             this.gb_camera.Controls.Add(this.cam_x);
             this.gb_camera.Controls.Add(this.cam_z);
             this.gb_camera.Controls.Add(this.cam_y);
-            this.gb_camera.Location = new System.Drawing.Point(12, 408);
+            this.gb_camera.Location = new System.Drawing.Point(12, 448);
             this.gb_camera.Name = "gb_camera";
             this.gb_camera.Size = new System.Drawing.Size(130, 73);
             this.gb_camera.TabIndex = 8;
             this.gb_camera.TabStop = false;
-            this.gb_camera.Text = "Камера";
+            this.gb_camera.Text = "Смещение камеры";
             // 
             // label3
             // 
@@ -334,7 +417,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(800, 505);
+            this.ClientSize = new System.Drawing.Size(860, 554);
             this.Controls.Add(this.gb_camera);
             this.Controls.Add(this.gb_lighting);
             this.Controls.Add(this.gb_walls);
@@ -353,6 +436,9 @@
             this.gb_walls.PerformLayout();
             this.gb_lighting.ResumeLayout(false);
             this.gb_lighting.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.light_y)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.light_x)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.light_z)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.cam_x)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.cam_y)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.cam_z)).EndInit();
@@ -388,6 +474,12 @@
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.Label label4;
+        private System.Windows.Forms.Label label5;
+        private System.Windows.Forms.Label label6;
+        private System.Windows.Forms.NumericUpDown light_y;
+        private System.Windows.Forms.NumericUpDown light_x;
+        private System.Windows.Forms.NumericUpDown light_z;
     }
 }
 

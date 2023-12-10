@@ -87,11 +87,14 @@ namespace RayTracing
         {
             return Math.Sqrt(v.x * v.x + v.y * v.y + v.z * v.z);
         }
+        public double LengthSquared()
+        {
+            return x * x + y * y + z * z;
+        }
         public double Length()
         {
-            return Math.Sqrt(x * x + y * y + z * z);
+            return Math.Sqrt(LengthSquared());
         }
-
 
         private Vector3 Clamp()
         {
@@ -133,6 +136,10 @@ namespace RayTracing
                         throw new IndexOutOfRangeException("Index should be in the range [0, 3].");
                 }
             }
+        }
+        public override string ToString()
+        {
+            return $"({x}, {y}, {z})";
         }
     }
 }

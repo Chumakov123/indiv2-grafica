@@ -12,7 +12,6 @@ namespace RayTracing
         {
             AMBIENT,
             POINT,
-            DIRECTIONAL
         }
 
         public Type type;
