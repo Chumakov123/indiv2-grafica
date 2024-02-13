@@ -42,7 +42,7 @@ namespace RayTracing
                         Vector3 rayDirection = CalculateRayDirection(x, y);
                         Ray ray = new Ray(camera_pos, rayDirection.Normalize());
 
-                        Color pixelColor = TraceRay(ray, 5);
+                        Color pixelColor = TraceRay(ray, 35);
                         fastBitmap[x + canvas.Width / 2, canvas.Height / 2 - y - 1] = pixelColor;
                     }
             }
@@ -95,14 +95,6 @@ namespace RayTracing
                     color = CombineColors(color, reflectionColor, material.reflection);
                 }
 
-                //// Прозрачность
-                //if (material.transparent > 0)
-                //{
-                //    Ray refractedRay = CalculateRefractedRay(ray, intersectionPoint, normal, material.transparent);
-                //    Color refractionColor = TraceRay(refractedRay, depth - 1);
-                //    color = CombineColors(color, refractionColor, material.transparent);
-                //}
-
                 return color;
             }
 
@@ -114,7 +106,7 @@ namespace RayTracing
 
             foreach (var light in scene.lights.Values)
             {
-                if (!light.isEnabled) 
+                if (!light.isEnabled)
                     continue;
                 if (light.type == LightSource.Type.AMBIENT)
                 {
@@ -132,12 +124,13 @@ namespace RayTracing
                     if (!isShadowed)
                     {
                         double diffuseIntensity = Math.Max(0, Vector3.Dot(normal, lightDirection));
-                        double attenuation = 1.0 / (1.0 + 0.1 * distanceToLight + 0.01 * distanceToLight * distanceToLight);
+                        double attenuation = 2.0 / (1.0 + 0.5 * distanceToLight + 0.03 * distanceToLight * distanceToLight);
 
-                        if (light.type == LightSource.Type.POINT)
-                        {
-                            color = CombineColors(color, shape.color, diffuseIntensity * attenuation * light.intensity);
-                        }
+                        // Specular reflection
+                        Vector3 reflectionDirection = Vector3.Reflect(-lightDirection, normal);
+                        double specularIntensity = Math.Pow(Math.Max(0, Vector3.Dot(reflectionDirection, lightDirection)), 8);
+
+                        color = CombineColors(color, shape.color, (diffuseIntensity + specularIntensity) * attenuation * light.intensity);
                     }
                 }
             }

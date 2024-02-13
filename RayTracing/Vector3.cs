@@ -45,6 +45,11 @@ namespace RayTracing
 
             return this * (1.0 / Length());
         }
+        public static Vector3 Reflect(Vector3 incident, Vector3 normal)
+        {
+            return incident - 2 * Vector3.Dot(incident, normal) * normal;
+        }
+
         public static Vector3 operator +(Vector3 lhs, Vector3 rhs)
         {
             return new Vector3(lhs.x + rhs.x, lhs.y + rhs.y, lhs.z + rhs.z);

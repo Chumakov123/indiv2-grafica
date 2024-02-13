@@ -86,7 +86,7 @@
             // 
             this.canvas.Location = new System.Drawing.Point(148, 12);
             this.canvas.Name = "canvas";
-            this.canvas.Size = new System.Drawing.Size(700, 530);
+            this.canvas.Size = new System.Drawing.Size(947, 732);
             this.canvas.TabIndex = 1;
             this.canvas.TabStop = false;
             // 
@@ -417,7 +417,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(860, 554);
+            this.ClientSize = new System.Drawing.Size(1107, 756);
             this.Controls.Add(this.gb_camera);
             this.Controls.Add(this.gb_lighting);
             this.Controls.Add(this.gb_walls);
